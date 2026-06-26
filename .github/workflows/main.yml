@@ -1,0 +1,34 @@
+export default {
+    command: 'mycommand',
+    aliases: ['mc', 'mycmd'],
+    category: 'utility',
+    description: 'Does something cool',
+    usage: '.mycommand <input>',
+
+    // Optional permission flags
+    ownerOnly: false,      // Owner/sudo only
+    groupOnly: false,      // Groups only
+    adminOnly: false,      // Group admins only
+    isPrefixless: true,    // Works without prefix too
+    cooldown: 5,           // Cooldown in seconds
+
+    async handler(sock: any, message: any, args: any[], context: any = {}) {
+        const {
+            chatId,           // Chat JID
+            senderId,         // Sender JID
+            isGroup,          // boolean
+            isSenderAdmin,    // boolean
+            isBotAdmin,       // boolean
+            senderIsOwnerOrSudo, // boolean
+            rawText,          // Full message text
+            userMessage,      // Lowercase message
+            config,           // Bot configuration 
+            channelInfo       // MEGA-MD branding spread
+        } = context;
+
+        await sock.sendMessage(chatId, {
+            text: `You said: ${args.join(' ')}`,
+            ...channelInfo
+        }, { quoted: message });
+    }
+};
